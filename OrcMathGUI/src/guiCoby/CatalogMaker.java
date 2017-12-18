@@ -1,5 +1,7 @@
 package guiCoby;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,6 +25,7 @@ public class CatalogMaker {
 			System.out.println(maker.getCSVContent());
 			System.out.println("Are you done adding?");
 			if(in.nextLine().equals("yes")) {
+				save("catalog.csv");
 				break;
 			}
 		}
@@ -67,6 +70,17 @@ public class CatalogMaker {
 			data += b + "\n";
 		}
 		return data;
+	}
+	
+	public static void save(String fileName) {
+		try{    
+			 FileWriter fw=new FileWriter(fileName);    
+			 fw.write("This file was created programmatically.");
+			 fw.close();    
+			 System.out.println("Success! File \""+fileName+"\" saved!");
+		 }catch(IOException e){
+			 System.out.println("An IOException was thrown. \nCheck to see that the directory where you tried to save the file actually exists.");
+		 }
 	}
 	
 }
