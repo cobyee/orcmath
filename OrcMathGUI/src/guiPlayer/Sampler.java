@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
@@ -132,6 +131,7 @@ public class Sampler extends GUIApplication implements FileRequester{
 				FileOpenButton fileButton = new FileOpenButton(490, 70, 120, 30, null,Sampler.this);
 				viewObjects.add(fileButton);
 			
+			//viewObjects.add(new Book());
 		}
 		
 		public void mouseDragged(MouseEvent m) {
