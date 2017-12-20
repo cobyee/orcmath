@@ -15,13 +15,8 @@ public class CatalogMaker {
 		in = new Scanner(System.in);
 		CatalogMaker maker = new CatalogMaker();
 		while(!done) {
-			String newName = getName();
-			String newAuthor = getAuthor();
-			String newGenre = getGenre();
-			int newCount = getCount();
-			int newPrice = getPrice();
-			Book newOne = new Book(newPrice, newCount, newName, newAuthor, newGenre);
-			books.add(1,newOne);
+			Book book = ask();
+			add(book);
 			System.out.println(maker.getCSVContent());
 			System.out.println("Are you done adding?");
 			if(in.nextLine().equals("yes")) {
@@ -29,6 +24,25 @@ public class CatalogMaker {
 				break;
 			}
 		}
+	}
+	
+	public static Book ask() {
+		String name;
+		String author;
+		int count;
+		String genre;
+		int price;
+		name = getName();
+		author = getAuthor();
+		genre = getGenre();
+		price = getPrice();
+		count = getCount();
+		Book b = new Book (price,count,name,author,genre);
+		return b;
+	}
+	
+	public static void add(Book b) {
+		books.add(b);
 	}
 	
 	public static String getName() {
