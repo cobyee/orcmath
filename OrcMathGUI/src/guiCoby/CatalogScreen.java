@@ -12,11 +12,10 @@ import guiTeacher.userInterfaces.FullFunctionScreen;
 
 public class CatalogScreen extends FullFunctionScreen implements FileRequester{
 
-	private TextField title;
-	private TextField author;
-	private TextField genre;
-	private TextField count;
-	private TextField price;
+	private TextField firstName;
+	private TextField lastName;
+	private TextField team;
+	private TextField number;
 	private Button addButton;
 	private Button saveButton;
 	private Button deleteButton;
@@ -31,18 +30,15 @@ public class CatalogScreen extends FullFunctionScreen implements FileRequester{
 
 	@Override
 	public void initAllObjects(List<Visible> viewObjects) {
-		title = new TextField(40, 40, 200, 30, "Enter text","Title");
-		viewObjects.add(title);
-		author = new TextField(40, 100, 200, 30, "Enter text","Author");
-		viewObjects.add(author);
-		genre = new TextField(40, 160, 200, 30, "Enter text","Genre");
-		viewObjects.add(genre);
-		count = new TextField(40, 220, 200, 30, "Enter text","Page Count");
-		count.setInputType(TextField.INPUT_TYPE_NUMERIC);
-		viewObjects.add(count);
-		price = new TextField(40, 280, 200, 30, "Enter text","Price");
-		price.setInputType(TextField.INPUT_TYPE_NUMERIC);
-		viewObjects.add(price);
+		firstName = new TextField(40, 40, 200, 30, "Enter text","First Name");
+		viewObjects.add(firstName);
+		lastName = new TextField(40, 100, 200, 30, "Enter text","Last Name");
+		viewObjects.add(lastName);
+		team = new TextField(40, 160, 200, 30, "Enter text","Team");
+		viewObjects.add(team);
+		number = new TextField(40, 220, 200, 30, "Enter text","Number");
+		number.setInputType(TextField.INPUT_TYPE_NUMERIC);
+		viewObjects.add(number);
 		text = new TextArea(40, 340, 500, 200,"This is where text goes");
 		viewObjects.add(text);
 		addButton = new Button(300, 40, 60, 30, "Add item", new Action() {
@@ -79,14 +75,13 @@ public class CatalogScreen extends FullFunctionScreen implements FileRequester{
 	}
 
 	protected void addClicked() {
-		Book b = new Book(Integer.parseInt(price.getText()),Integer.parseInt(count.getText()),title.getText(),author.getText(),genre.getText());
-		text.setText(text.getText()+"\n"+b);
-		catalog.add(b);
-		title.setText("");
-		author.setText("");
-		genre.setText("");
-		count.setText("");
-		price.setText("");
+		Player p = new Player(firstName.getText(),lastName.getText(),team.getText(),Integer.parseInt(number.getText()));
+		text.setText(text.getText()+"\n"+p);
+		catalog.add(p);
+		firstName.setText("");
+		lastName.setText("");
+		team.setText("");
+		number.setText("");
 	}
 
 	@Override

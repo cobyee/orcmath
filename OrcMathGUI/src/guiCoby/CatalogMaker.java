@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import guiPlayer.Book;
+
 public class CatalogMaker {
 
-	private static ArrayList<Book> books;
+	private static ArrayList<Player> players;
 	public static Scanner in;
 	private static boolean done = false;
 	
@@ -15,8 +17,8 @@ public class CatalogMaker {
 		in = new Scanner(System.in);
 		CatalogMaker maker = new CatalogMaker();
 		while(!done) {
-			Book book = ask();
-			add(book);
+			Player player = ask();
+			add(player);
 			System.out.println(maker.getCSVContent());
 			System.out.println("Are you done adding?");
 			if(in.nextLine().equals("yes")) {
@@ -26,75 +28,72 @@ public class CatalogMaker {
 		}
 	}
 	
-	public static Book ask() {
-		String name;
-		String author;
-		int count;
-		String genre;
-		int price;
-		name = getName();
-		author = getAuthor();
-		genre = getGenre();
-		price = getPrice();
-		count = getCount();
-		Book b = new Book (price,count,name,author,genre);
+	public static Player ask() {
+		String firstName;
+		String lastName;
+		int number;
+		String team;
+		firstName = getFirstName();
+		lastName = getLastName();
+		team = getTeam();
+		number = getNumber();
+		Player b = new Player(firstName, lastName, team, number);
 		return b;
 	}
 	
-	public static void add(Book b) {
-		books.add(b);
+	public static void add(Player b) {
+		players.add(b);
 	}
 	
-	public static String getName() {
-		System.out.println("What is the name of the book you want to add?");
+	public static String getFirstName() {
+		System.out.println("What is the first name of the player you want to add?");
 		return in.nextLine();
 	}
 
-	private static int getPrice() {
-		System.out.println("How much does this book cost?");
-		return Integer.valueOf(in.nextLine());
-	}
-
-	private static int getCount() {
-		System.out.println("How many pages does this book have?");
-		return Integer.valueOf(in.nextLine());
-	}
-
-	private static String getGenre() {
-		System.out.println("What is the genre of this book?");
+	private static String getLastName() {
+		System.out.println("What is this player's last name?");
 		return in.nextLine();
 	}
 
-	private static String getAuthor() {
-		System.out.println("Who wrote this book?");
+	private static int getNumber() {
+		System.out.println("What is the number of this player?");
+		return Integer.valueOf(in.nextLine());
+	}
+
+	private static String getTeam() {
+		System.out.println("Which team is this player on?");
 		return in.nextLine();
 	}
 
 	public CatalogMaker() {
-		books = new ArrayList<Book>();
-		books.add(new Book(10,50,"The Book", "Coby","Horror"));
-		books.add(new Book(25,60,"Winner", "Al","Comedy"));
-		books.add(new Book(5,20,"Loser", "Joe","Horror"));
-		books.add(new Book(30,100,"The Lockness Monster", "Sally","Non-fiction"));
+		players = new ArrayList<Player>();
+		players.add(new Player("Lebron","James","Cavaliers",6));
+		players.add(new Player("Carmelo","Anthony","Thunder",7));
+		players.add(new Player("Stephen","Curry","Warriors",30));
+		players.add(new Player("Kevin","Durant","Warriors",35));
 	}
 	
 	public String getCSVContent() {
 		String data = "";
-		for(Book b: books) {
+		for(Player b: players) {
 			data += b + "\n";
 		}
 		return data;
 	}
 	
 	public static void save(String fileName) {
+
 		try{    
-			 FileWriter fw=new FileWriter(fileName);    
-			 fw.write("This file was created programmatically.");
-			 fw.close();    
-			 System.out.println("Success! File \""+fileName+"\" saved!");
-		 }catch(IOException e){
-			 System.out.println("An IOException was thrown. \nCheck to see that the directory where you tried to save the file actually exists.");
-		 }
+			FileWriter fw=new FileWriter("PlayerList.csv");
+			for(Player p: players){
+				fw.write(p+"\n");    	
+			}
+
+			fw.close();    
+			System.out.println("Success! File \"PlayerList.csv\" saved!");
+		}catch(IOException e){
+			System.out.println("An IOException was thrown. \nCheck to see that the directory where you tried to save the file actually exists.");
+		}
 	}
 	
 }

@@ -6,27 +6,25 @@ import java.awt.Graphics2D;
 import guiTeacher.components.AnimatedComponent;
 import guiTeacher.components.Component;
 
-public class Book extends Component {
+public class Player extends Component {
 
-	int price;
-	int pageCount;
+	int number;
 	//String imgAddress;
-	String title;
-	String author;
-	String genre;
+	String firstName;
+	String lastName;
+	String team;
 	
-	public Book(int price, int pageCount, String title, String author, String genre) {
+	public Player(String firstName, String lastName, String team, int number) {
 		super(40, 40, 120, 120);
 		//addSequence("resources/spritesheet.png", 150, 0, 0, 120, 120, 4);
 		//Thread animation = new Thread(this);
 		//animation.start();
 		//update();
-		this.price = price;
-		this.pageCount = pageCount;
+		this.number = number;
+		this.firstName = firstName;
 		//this.imgAddress = imgAddress;
-		this.title = title;
-		this.author = author;
-		this.genre = genre;
+		this.lastName = lastName;
+		this.team = team;
 	}
 
 	@Override
@@ -36,7 +34,7 @@ public class Book extends Component {
 	}
 
 	public String toString() {
-		return title + ", " + author + ", " + genre + ", " + pageCount + ", " + price;
+		return firstName + ", " + lastName + ", " + team + ", " + number;
 	}
 	
 }
