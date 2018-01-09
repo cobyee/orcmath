@@ -24,7 +24,7 @@ public class GameScreen extends ClickableScreen implements Runnable{
 	private ArrayList<MoveInterface> buttonOrder = new ArrayList<MoveInterface>();
 	private int count;
 	private int roundNumber = 1;
-	boolean userturn = false;
+	boolean acceptingInput = false;
 	int lastSelectedButton;
 	
 	public GameScreen(int width,int height) {
@@ -80,7 +80,7 @@ public class GameScreen extends ClickableScreen implements Runnable{
 		colors[3] = Color.green;
 		colors[4] = Color.pink;
 		for(int i = 0; i < numberOfButtons; i++) {
-			ButtonInterface b = getAButton();
+			final ButtonInterface b = getAButton();
 			b.setColor(colors[i]);
 			b.setX(40);
 			b.setY(40);
@@ -88,7 +88,18 @@ public class GameScreen extends ClickableScreen implements Runnable{
 				
 				public void act() {
 					if(acceptingInput) {
-						
+						Thread blink = new Thread(new Runnable() {
+							public void run() {
+								b.highlight();
+								try {
+									Thread.sleep(800);
+								} catch(InterruptedException e) {
+									e.printStackTrace();
+								}
+								b.dim();
+							}
+						});
+						blink.start();
 					}
 				}
 				
