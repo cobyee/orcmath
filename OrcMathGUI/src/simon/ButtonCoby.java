@@ -34,8 +34,7 @@ public class ButtonCoby extends Button implements ButtonInterfaceCoby{
 	}
 
 	public void drawButton(Graphics2D g, boolean hover) {
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		
 		drawShape(g, hover);
 		g.setColor(getForeground());
 	}
