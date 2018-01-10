@@ -1,24 +1,27 @@
 package simon;
 
-import guiCoby.CatalogScreen;
 import guiTeacher.GUIApplication;
 
 public class Design extends GUIApplication{
 
+	public static Design sample;
+	public static GameScreen simon;
+	
 	public Design(int width, int height) {
 		super(width, height);
 		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		GameScreen screen = new GameScreen(getWidth(),getHeight());
-		setScreen(screen);
+		sample = new Design(1000,1000);
+		Thread go = new Thread(sample);
+		go.start();
 	}
 
 	@Override
 	public void initScreen() {
-		// TODO Auto-generated method stub
-		
+		simon = new GameScreen(getWidth(), getHeight());
+		setScreen(simon);
 	}
 
 }

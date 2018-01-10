@@ -1,122 +1,198 @@
 package simon;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-
-import guiTeacher.components.Action;
-import guiTeacher.components.Button;
-import guiTeacher.components.TextArea;
-import guiTeacher.components.TextLabel;
-import guiTeacher.interfaces.FileRequester;
+import guiTeacher.components.*;
 import guiTeacher.interfaces.Visible;
 import guiTeacher.userInterfaces.ClickableScreen;
-import guiTeacher.userInterfaces.FullFunctionScreen;
 
-public class GameScreen extends ClickableScreen implements Runnable{
-
-	private ButtonInterface[] buttons;
-	private ProgressInterface progress;
-	private TextLabel text;
-	private ArrayList<MoveInterface> buttonOrder = new ArrayList<MoveInterface>();
-	private int count;
-	private int roundNumber = 1;
-	boolean acceptingInput = false;
-	int lastSelectedButton;
+public class GameScreen extends ClickableScreen implements Runnable {
 	
-	public GameScreen(int width,int height) {
-		super(width,height);
-		Thread app = new Thread(this);
+	private static TextLabel text;
+	private ProgressInterfaceCoby progress;
+	private ArrayList<MoveInterfaceCoby> array;
+	private ButtonInterfaceCoby[] buttons;
+	private int roundNumber = 1;
+	private boolean acceptingInput;
+	private int sequenceNumber = 3;
+	private int lastselectedbutton;
+	private Color[] colors;
+	private static TextLabel stuff;
+	
+	public GameScreen(int width, int height) {
+		super(width, height);
+		Thread app= new Thread(this);
 		app.start();
 	}
+	public void run() {
+		 text.setText("");
+	     nextRound();
+		
+	}
+	private void nextRound() {
+		acceptingInput = false;
+		roundNumber++;
+		array.add(randomMove());
+		progress.setRound(roundNumber);
+		progress.setSequenceSize(array.size());
+		changeText("Simon's Turn");
+		text.setText("");
+		playSequence();
+		changeText("Your Turn");
+		acceptingInput = true;
+		sequenceNumber = 0;
+		
+	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	private void playSequence() {
+		ButtonInterfaceCoby b = null;
+		for(int i = 0; i < array.size(); i++) {
+			if(b != null) {
+				b.dim();
+				b = array.get(i).getTheButton();
+				b.highlight();
+				
+				try {
+	                Thread.sleep((int)(1000*roundNumber));
+	            } catch (InterruptedException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
+				b.dim();
+			}
+		}
+		
+		
+		
 	}
 
 	@Override
 	public void initAllObjects(List<Visible> viewObjects) {
 		addButtons();
-		for(ButtonInterface b: buttons) {
+		for(ButtonInterfaceCoby b:buttons) {
 			viewObjects.add(b);
 		}
 		progress = getProgress();
-		buttonOrder = new ArrayList<MoveInterface>();
-		lastSelectedButton = -1;
-		buttonOrder.add(randomMove());
-		buttonOrder.add(randomMove());
-		roundNumber = 0;
-		viewObjects.add(progress);
-		viewObjects.add(text);
-	}
-
-	private MoveInterface randomMove() {
-		int random = (int)(Math.random()*buttons.length);
-		while(random == lastSelectedButton) {
-			random = (int)(Math.random()*buttons.length);
+		text= new TextLabel(10,10,200,200,"");
+		array= new ArrayList<MoveInterfaceCoby>();
+		lastselectedbutton=-1;
+		array.add(randomMove());
+		array.add(randomMove());
+		for(int i = 0; i < sequenceNumber; i++) {
+			array.add(randomMove());
 		}
-		return getMove(random);
+		roundNumber=0;
+		progress.setRound(roundNumber);
+		stuff = new TextLabel(500, 500, 300, 80, "Round Number: " + roundNumber + "  Sequence Number: " + sequenceNumber);
+		viewObjects.add(progress);
+		viewObjects.add(stuff);
+		viewObjects.add(text);
+		
+
+	}
+	private MoveInterfaceCoby randomMove() {
+		int randomidx= (int)(Math.random()*buttons.length);
+		while(randomidx==lastselectedbutton) {
+			randomidx=(int)(Math.random()*buttons.length);
+		}
+		return getMove(randomidx);
+	}
+	/**
+	Placeholder until partner finishes implementation of MoveInterface
+	*/
+	private MoveInterfaceCoby getMove(int randomidx) {
+		return new MoveCoby(buttons[randomidx]);
 	}
 
-	private MoveInterface getMove(int random) {
-		return null;
-	}
+	/**
+	Placeholder until partner finishes implementation of ProgressInterface
+	*/
 
-	private ProgressInterface getProgress() {
-		// TODO Auto-generated method stub
-		return null;
+	private ProgressInterfaceCoby getProgress() {
+		return new ProgressCoby(100, 100, 200, 200);
 	}
 
 	private void addButtons() {
-		int numberOfButtons = 4;
-		buttons = new ButtonInterface[numberOfButtons];
-		Color[] colors = null;
-		colors[1] = Color.blue;
-		colors[2] = Color.red;
-		colors[3] = Color.green;
-		colors[4] = Color.pink;
-		for(int i = 0; i < numberOfButtons; i++) {
-			final ButtonInterface b = getAButton();
+		
+		colors = new Color[4];
+		colors[0] = Color.BLUE;
+		colors[1] = Color.GREEN;
+		colors[2] = Color.BLACK;
+		colors[3] = Color.RED;
+		buttons= new ButtonInterfaceCoby[4];
+		
+		for(int i=0;i<buttons.length;i++) {
+			final ButtonInterfaceCoby b=getAButton(i*100+50,100,50,50);
 			b.setColor(colors[i]);
-			b.setX(40);
-			b.setY(40);
-			b.setAction(new Action(){
+		//	b.setX(100);
+			//b.setY((i*100)+100);
+			b.setAction(new Action() {
 				
+				@Override
 				public void act() {
 					if(acceptingInput) {
-						Thread blink = new Thread(new Runnable() {
+						Thread blink= new Thread(new Runnable() {
+							
+							@Override
 							public void run() {
 								b.highlight();
-								try {
+								try{
 									Thread.sleep(800);
-								} catch(InterruptedException e) {
+								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
 								b.dim();
 							}
 						});
 						blink.start();
+						if(b == array.get(sequenceNumber).getTheButton()) {
+		    		    	sequenceNumber++;
+		    		    }
+		    		    else {
+		    		    	progress.gameOver();
+		    		    }
+		    		    if(sequenceNumber == array.size()){
+		    		        Thread nextRound = new Thread(GameScreen.this);
+		    		        nextRound.start();
+		    		    }
+							
 					}
 				}
-				
 			});
-			buttons[i] = b;
+			buttons[i]=b;
 		}
-	}
-
-	private ButtonInterface getAButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
 		
 	}
+	/**
+	Placeholder until partner finishes implementation of ButtonInterface
+	 * @param j 
+	 * @param i 
+	*/
+
+	private ButtonInterfaceCoby getAButton(int x, int y,int w,int h) {
+		return new ButtonCoby(x, y, w, h, "",null);	
+	}
+
+	
+
+	
+	public static TextLabel getLabel() {
+		return text;
+	}
+	
+
+	private void changeText(String string) {
+		text.setText(string);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+	}
+	}
+
+	
 
 }
