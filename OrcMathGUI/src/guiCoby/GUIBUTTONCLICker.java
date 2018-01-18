@@ -21,5 +21,4 @@ public class GUIBUTTONCLICker extends GUIApplication {
 		Thread go = new Thread(sample);
 		go.start();
 	}
-
 }

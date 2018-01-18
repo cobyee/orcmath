@@ -76,5 +76,4 @@ public class ButtonClicker extends FullFunctionScreen{
 		viewObjects.add(button);
 		viewObjects.add(text);
 	}
-	
 }
