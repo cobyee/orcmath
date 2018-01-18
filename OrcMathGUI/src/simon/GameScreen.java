@@ -85,7 +85,7 @@ public class GameScreen extends ClickableScreen implements Runnable {
 		}
 		roundNumber=0;
 		progress.setRound(roundNumber);
-		stuff = new TextLabel(500, 500, 300, 80, "Round Number: " + roundNumber + "  Sequence Number: " + sequenceNumber);
+		stuff = new TextLabel(500, 500, 300, 80, "Round Number: 1 Sequence Number: 3");
 		viewObjects.add(progress);
 		viewObjects.add(stuff);
 		viewObjects.add(text);
@@ -123,8 +123,8 @@ public class GameScreen extends ClickableScreen implements Runnable {
 		colors[3] = Color.RED;
 		buttons= new ButtonInterfaceCoby[4];
 		
-		for(int i=0;i<buttons.length;i++) {
-			final ButtonInterfaceCoby b=getAButton(i*100+50,100,50,50);
+		for(int i=0;i<2;i++) {
+			final ButtonInterfaceCoby b=getAButton(i*100+50,100,80,80);
 			b.setColor(colors[i]);
 		//	b.setX(100);
 			//b.setY((i*100)+100);
@@ -163,7 +163,46 @@ public class GameScreen extends ClickableScreen implements Runnable {
 			});
 			buttons[i]=b;
 		}
-		
+		for(int i=2;i<4;i++) {
+			final ButtonInterfaceCoby b=getAButton((i-2)*100+50,300,80,80);
+			b.setColor(colors[i]);
+		//	b.setX(100);
+			//b.setY((i*100)+100);
+			b.setAction(new Action() {
+				
+				@Override
+				public void act() {
+					if(acceptingInput) {
+						Thread blink= new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								b.highlight();
+								try{
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								b.dim();
+							}
+						});
+						blink.start();
+						if(b == array.get(sequenceNumber).getTheButton()) {
+		    		    	sequenceNumber++;
+		    		    }
+		    		    else {
+		    		    	progress.gameOver();
+		    		    }
+		    		    if(sequenceNumber == array.size()){
+		    		        Thread nextRound = new Thread(GameScreen.this);
+		    		        nextRound.start();
+		    		    }
+							
+					}
+				}
+			});
+			buttons[i]=b;
+		}
 	}
 	/**
 	Placeholder until partner finishes implementation of ButtonInterface
